@@ -1,15 +1,32 @@
 let randomIndexArray;
 let playerPlayCount = 0;
+let currentLevel = 1;
+stageLevelLabel = document.querySelector("#stage-level");
+stageLevelLabel.innerText = currentLevel;
+
+// scale들 정의
+const cMajorScale = [0, 2, 4, 5, 7, 9, 11, 12];
+const cMinorScale = [0, 2, 3, 5, 7, 9, 10, 12];
+const chromaticScale = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, , 10, 11, 12];
+scales = [cMajorScale, cMinorScale, chromaticScale];
 
 // sleep 함수 정의
 const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-// audio context 시작
+
+// random 함수 정의
+function randomChoice(lst) {
+  return lst[Math.floor(Math.random() * lst.length)];
+}
+
+// audio context
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
 
+
+// 오디오 로딩
 const audioArray = [];
 audioArray.push(document.querySelector("#C2"));
 audioArray.push(document.querySelector("#Cs2"));
@@ -28,110 +45,91 @@ audioArray.forEach((item, index) => {
   audioContext.createMediaElementSource(item).connect(audioContext.destination);
 });
 
-buttonArray = [];
-buttonArray.push(document.querySelector("#C2-button"));
-buttonArray.push(document.querySelector("#Cs2-button"));
-buttonArray.push(document.querySelector("#D2-button"));
-buttonArray.push(document.querySelector("#Ds2-button"));
-buttonArray.push(document.querySelector("#E2-button"));
-buttonArray.push(document.querySelector("#F2-button"));
-buttonArray.push(document.querySelector("#Fs2-button"));
-buttonArray.push(document.querySelector("#G2-button"));
-buttonArray.push(document.querySelector("#Gs2-button"));
-buttonArray.push(document.querySelector("#A2-button"));
-buttonArray.push(document.querySelector("#As2-button"));
-buttonArray.push(document.querySelector("#B2-button"));
-buttonArray.push(document.querySelector("#C3-button"));
-buttonArray.forEach((item, index) =>
+
+// 버튼에 클릭 이벤트 추가
+pianoButtonArray = [];
+pianoButtonArray.push(document.querySelector("#C2-button"));
+pianoButtonArray.push(document.querySelector("#Cs2-button"));
+pianoButtonArray.push(document.querySelector("#D2-button"));
+pianoButtonArray.push(document.querySelector("#Ds2-button"));
+pianoButtonArray.push(document.querySelector("#E2-button"));
+pianoButtonArray.push(document.querySelector("#F2-button"));
+pianoButtonArray.push(document.querySelector("#Fs2-button"));
+pianoButtonArray.push(document.querySelector("#G2-button"));
+pianoButtonArray.push(document.querySelector("#Gs2-button"));
+pianoButtonArray.push(document.querySelector("#A2-button"));
+pianoButtonArray.push(document.querySelector("#As2-button"));
+pianoButtonArray.push(document.querySelector("#B2-button"));
+pianoButtonArray.push(document.querySelector("#C3-button"));
+pianoButtonArray.forEach((item, index) =>
   item.addEventListener(
     "click",
     function () {
       if (audioContext.state === "suspended") {
         audioContext.resume();
       }
-      audioArray
-    [index].pause();
-      audioArray
-    [index].currentTime = 0;
-      audioArray
-    [index].play();
+      audioArray[index].pause();
+      audioArray[index].currentTime = 0;
+      audioArray[index].play();
       isCorrectNote(index);
     },
     false
   )
 );
 
-btnPlay = document.querySelector("#play-random-seq-button");
-btnPlay.addEventListener(
+buttonPlay = document.querySelector("#play-random-seq-button");
+buttonPlay.addEventListener(
   "click",
   function () {
     audioContext.resume();
-    randomIndexArr = generateRandomSequence()
-  
-  ;
-    playSequence(randomIndexArr)
-  
-  ;
+    randomIndexArr = generateRandomSequence();
+    playSequence(randomIndexArr);
   },
   false
 );
 
-btnReplay = document.querySelector("#replay-button");
-btnReplay.addEventListener(
+buttonReplay = document.querySelector("#replay-button");
+buttonReplay.addEventListener(
   "click",
   function () {
     audioContext.resume();
-    playSequence(randomIndexArr)
-  
-  ;
+    playSequence(randomIndexArr);
   },
   false
 );
 
-let currentLevel = 1;
-stageLevelLabel = document.querySelector("#stage-level");
-stageLevelLabel.innerText = currentLevel;
-
-function setLevel() {}
 
 function generateRandomSequence() {
-  const indexArr = [];
+  randomScale = randomChoice(scales)
+  const randomNotes  = [];
   for (let index = 0; index < currentLevel + 2; index++) {
-    indexArr.push(Math.floor(Math.random() * buttonArray.length));
+    const randomIndex = Math.floor(Math.random() * randomScale.length);
+    randomNotes.push(randomScale[randomIndex]);
   }
-  return indexArr;
+  return randomNotes ;
 }
 
 async function playSequence(indexArr) {
   console.log("play : ", indexArr);
-
   for (const index of indexArr) {
-    audioArray
-  [index].pause();
-    audioArray
-  [index].currentTime = 0;
-    audioArray
-  [index].play();
+    audioArray[index].pause();
+    audioArray[index].currentTime = 0;
+    audioArray[index].play();
     await sleep(700);
   }
 }
 
 // 건반을 누르는 시점부터 count해가지고 randomIndexArr의 size에 도달하면 sequnce에 맞게 쳤는지 평가 <- 별로네
-// 건반을 누를때마다 count 올려서 randomIndexArr[count]와 내가 누른 게 동일하면 계속 진행, count가 randomIndexArr의 size에 도달하면 성ay공
+// 건반을 누를때마다 count 올려서 randomIndexArr[count]와 내가 누른 게 동일하면 계속 진행, count가 randomIndexArr의 size에 도달하면 성공
 // -> level += 1
-// ->
 feedbackLabel = document.querySelector("#is-correct");
 
 function isCorrectNote(index) {
-  if (randomIndexArr[playerPlayCount] == index)
-  {
+  if (randomIndexArr[playerPlayCount] == index) {
     const li = document.querySelector(
       `#sequence-list li:nth-child(${playerPlayCount + 1})`
     );
     li.id = "square-blue";
-
-    // changeSquareColor(li, "square-blue")
-
     playerPlayCount += 1;
     feedbackLabel.innerText = "맞았음";
 
@@ -149,7 +147,7 @@ function isCorrectNote(index) {
       }
     }
 
-    // 실패
+  // 실패
   } else {
     playerPlayCount = 0;
     feedbackLabel.innerText = "틀렸음";
@@ -167,16 +165,14 @@ function addNewSequenceSquare() {
   const ul = document.getElementById("sequence-list");
   const li = document.createElement("li");
   const div = document.createElement("div");
-
   li.setAttribute("id", "square-red");
   li.appendChild(div);
   ul.appendChild(li);
 }
 
-function changeSquareColor(li, squareColorCssId) {}
-
 for (let index = 0; index < currentLevel + 2; index++) {
   addNewSequenceSquare();
 }
 
-// 틀리면 player 시도를 0으로 옮겨야 됨
+
+
