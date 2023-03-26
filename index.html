@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h1>현재 레벨 :</h1>
+      <h1 id="stage-level"></h1>
+    </div>
+
+    <div>
+      <ul id="sequence-list">
+      </ul>
+    </div>
+
+    <div class="keys">
+      <div class="key white" id="C2-button"></div>
+      <div class="key black" id="Cs2-button"></div>
+      <div class="key white" id="D2-button"></div>
+      <div class="key black" id="Ds2-button"></div>
+      <div class="key white" id="E2-button"></div>
+      <div class="key white" id="F2-button"></div>
+      <div class="key black" id="Fs2-button"></div>
+      <div class="key white" id="G2-button"></div>
+      <div class="key black" id="Gs2-button"></div>
+      <div class="key white" id="A2-button"></div>
+      <div class="key black" id="As2-button"></div>
+      <div class="key white" id="B2-button"></div>
+      <div class="key white" id="C3-button"></div>
+    </div>
+
+    <audio id="C2" src="piano-notes/C2.mp3"></audio>
+    <audio id="Cs2" src="piano-notes/Cs2.mp3"></audio>
+    <audio id="D2" src="piano-notes/D2.mp3"></audio>
+    <audio id="Ds2" src="piano-notes/Ds2.mp3"></audio>
+    <audio id="E2" src="piano-notes/E2.mp3"></audio>
+    <audio id="F2" src="piano-notes/F2.mp3"></audio>
+    <audio id="Fs2" src="piano-notes/Fs2.mp3"></audio>
+    <audio id="G2" src="piano-notes/G2.mp3"></audio>
+    <audio id="Gs2" src="piano-notes/Gs2.mp3"></audio>
+    <audio id="A2" src="piano-notes/A2.mp3"></audio>
+    <audio id="As2" src="piano-notes/As2.mp3"></audio>
+    <audio id="B2" src="piano-notes/B2.mp3"></audio>
+    <audio id="C3" src="piano-notes/C3.mp3"></audio>
+
+    <div id="play-random-seq-button">
+      <h1 id="play">Play</h1>
+    </div>
+
+    <div id="replay-button">
+      <h1 id="replay">Replay</h1>
+    </div>
+
+    <div>
+      <h1 id="is-correct">정답임</h1>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
